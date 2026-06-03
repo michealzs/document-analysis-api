@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "docanalysis"
+version = "0.1.0"
+description = "Flask document-analysis API with MLFlow tracking, chunked analysis, caching, and batch processing"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["flask", "mlflow", "api", "document-analysis", "pdf", "nlp"]
+dependencies = [
+    "Flask>=3.0,<4",
+    "Werkzeug>=3.0,<4",
+    "mlflow>=2.21,<3",
+    "PyPDF2>=3.0,<4",
+    "requests>=2.32,<3",
+    "gunicorn>=21,<23",
+    "prometheus-flask-exporter>=0.23,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.4"]
+
+[project.scripts]
+docanalysis = "docanalysis.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/docanalysis"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = ["E402"]
+
+[tool.ruff.lint.per-file-ignores]
+# Test request payloads read more clearly on one line.
+"tests/*" = ["E501"]

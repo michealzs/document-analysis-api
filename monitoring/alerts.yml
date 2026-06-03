@@ -1,0 +1,35 @@
+groups:
+  - name: docanalysis
+    rules:
+      - alert: ServiceDown
+        expr: up{job="docanalysis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "docanalysis is not being scraped"
+          description: "Prometheus has not scraped the service for over 1 minute."
+
+      - alert: HighServerErrorRate
+        expr: |
+          sum(rate(flask_http_request_total{status=~"5.."}[5m]))
+            / sum(rate(flask_http_request_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elevated 5xx error rate"
+          description: "More than 5% of requests are failing over the last 5 minutes."
+
+      - alert: HighLatencyP95
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum(rate(flask_http_request_duration_seconds_bucket[5m])) by (le)
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "p95 latency above 1s"
+          description: "95th-percentile request latency has exceeded 1 second for 5 minutes."

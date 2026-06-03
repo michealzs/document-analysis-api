@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Runtime data (uploads, results, db, mlruns, logs)
+data/
+mlruns/
+*.sqlite3
+*.db
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+
+# Collected static / misc
+staticfiles/
